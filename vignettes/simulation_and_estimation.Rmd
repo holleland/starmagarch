@@ -1,0 +1,126 @@
+---
+title: "Fitting a STARMAGARCH model"
+author: "Sondre Hølleland"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Fitting a STARMAGARCH model}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This vignette describes how to use the starmagarch packge to fit a STARMAGARCH($p,q,r,s$) model to data.
+
+## Simulation
+We start by simulating some data from a STARMAGARCH model. To do this, we must first specify the parameters and the neighbourhood system. The parameters should be a list containing the names `mu`, `phi`, `theta`, `omega`, `alpha`, `beta`, preferably in that order. The elements `mu` and `omega` are scalars (numeric), while the others should be matrices. The number of columns determines the maximum temporal lag and the number of rows the maximum spatial lag. These do not need to be equal for the differents parts of the model. 
+```{r, eval=TRUE}
+parameters <- list(
+  mu    = 5,
+  phi   = matrix(c(.8, .1), ncol = 1), #temporal order 1, spatial order 2
+  theta = matrix(c(-.42, -.2), ncol = 1),  #temporal order 1, spatial order 2
+  omega = .9,
+  alpha = matrix(c(.09, .13,
+                   .03, .07), ncol = 2), # temporal order 2, spatial order 2
+  beta  = matrix(c(.5, .15), ncol = 1) #temporal order 1, spatial order 2
+)
+sum(parameters$alpha,parameters$beta)
+```
+The neighbourhood system is specified using the `spdep` package. We have made a wrapper function that creates a three dimensional array where the first two dimensions give a neighbourhood matrix and the last is the order of the spatial lag. The first neighbourhood matrix (the lag 0 matrix) is an indentity matrix and all the remaining neighbourhood matrices are normalized so that each row (and column) add up to one. The spatial order of the neighbourhood system must be as large as the largest spatial order of the parameter list. In our example above, it must be at least 3 (lag 0 counts as 1). We also need to set a `type` argument. This decides if a rook or queen neighbourhood should be enabled. The `torus` argument decides whether or not the process should be circular, i.e. if the space should be "wrapped around a torus". The spatial sample size is set to $25\times 1$, i.e. a 1D space. The user may also specify other neighbourhood systems, but these are the automated ones. 
+```{r, eval = TRUE}
+# spatial dimension: 
+m <- c(25, 1)
+library(starmagarch)
+W <- create.neighbourhood.array(m = m, sp = 3, type = "rook", torus =TRUE) 
+```
+Now, we are ready to simulate a process. There are two calls, either you can specify the neighbourhood array in advance (as we just did) or the simulation function can create it for the specific simulation. The the spatial order is calculated from the parameters given. The reason for allowing these two options is that if you are to simulate multiple samples from the same process, it will be faster to not recreate the neighbourhood system every time. In this case, `#1` is the faster, recommended option. 
+```{r, eval = TRUE, fig.width = 10}
+set.seed(1234)
+y <- simSTARMAGARCH(parameters, n = 800, m = m, W=W, burnin = 500)   # 1
+#y <- simSTARMAGARCH(parameters, n = 2500, m = m, burnin = 500,        # 2
+                    #type= "rook", torus = TRUE) 
+```
+```{r}
+library(ggplot2)
+library(reshape2)
+ggplot(data=melt(y), aes(Var2,Var1))+ geom_raster(aes(fill = value))+
+  scale_fill_gradient2(low="blue", mid="white", high = "red", midpoint = mean(y)) + xlab("Time") + ylab("Space") + 
+  theme_bw()
+```
+
+## Estimation
+To Estimate a process, we must specify initial parameters. This also gives the order of the model you want to fit. Here we specify the model with correct order, but set some conservative values. 
+```{r, eval = TRUE}
+initial.parameters <- list(
+  mu    = mean(y),
+  phi   = matrix(c(.7, .01), ncol = 1), 
+  theta = matrix(c(.01, .01), ncol = 1), 
+  omega = 1,
+  alpha = matrix(c(.01, .01,
+                   .01, .01), ncol = 2), 
+  beta  = matrix(c(.01, .01), ncol = 1)
+)
+```
+The next step is to build a likelihood object from the `TMB` package. We have created a template for STARMAGARCH and created a wrapper function that builds the model. 
+```{r, eval = TRUE}
+# Create likelihood object:
+f <- CreateLikelihood(y, W=W,
+                 init = apply(y,1,var), parameters=initial.parameters)
+```
+Here, `f` is a list of functions containing the likelihood, gradient and hessian functions found by automatic differentiation. The `init` argument allows the user to specify initial values for the $\{\sigma_0^2(u)\}$ process. This should be a non-negative vector of length `prod(m)`. The other necessary initial values are set to zero. 
+
+Optimizing the likelihood is done using the `nlminb` function. We have also here written a wrapper function to do this. This function also creates an object of the class `starmagarch`, with classical generic functions attached to it, such as `plot`, `plot_garch`, `summary`, `AIC`, `BIC`, `residuals`, `coef`, `sigma`, `fitted`, `fittedgarch`, etc.
+```{r, eval = TRUE, fig.show='hold', fig.height = 5}
+fit <- fitSTARMAGARCH(f, data= y, print = FALSE)
+summary(fit)
+
+plot(fit)
+plot_garch(fit)
+```
+
+Comparing the results with the parameteres that generated the data: 
+```{r}
+rbind(round(coef(fit),4), unlist(parameters))
+```
+
+The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+
+    output: 
+      rmarkdown::html_vignette:
+        css: mystyles.css
+
+## Figures
+
+The figure sizes have been customised so that you can easily put two images side-by-side. 
+
+```{r, fig.show='hold'}
+plot(1:10)
+plot(10:1)
+```
+
+You can enable figure captions by `fig_caption: yes` in YAML:
+
+    output:
+      rmarkdown::html_vignette:
+        fig_caption: yes
+
+Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+
+## More Examples
+
+You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(head(mtcars, 10))
+```
+
+Also a quote using `>`:
+
+> "He who gives up [code] safety for [code] speed deserves neither."
+([via](https://twitter.com/hadleywickham/status/504368538874703872))
