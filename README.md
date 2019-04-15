@@ -1,2 +1,4 @@
 # starmagarch
-R-package
+R package for simulating and estimating STARMAGARCH models.
+
+Created by Sondre Hølleland.
