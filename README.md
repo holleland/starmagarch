@@ -1,0 +1,2 @@
+# starmagarch
+R-package
