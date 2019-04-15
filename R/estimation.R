@@ -49,9 +49,9 @@ fitSTARMAGARCH <- function(f, data=NULL,  print = TRUE){
                 lower=c(-10,
                         rep(-5,length(which(names(f$par)%in% c("phi","theta")))),
                         1e-8,
-                        rep(1e-8, length(c(length(which(names(f$par) %in% c("alpha","beta"))))))),
+                        rep(1e-8, length(which(names(f$par) %in% c("alpha","beta"))))),
                 upper=c(10,rep(5,length(which(names(f$par)%in% c("phi","theta")))),
-                        500, rep(1,length(c(length(which(names(f$par) %in% c("alpha","beta"))))))))
+                        500, rep(1,length(which(names(f$par) %in% c("alpha","beta"))))))
   # Problemer her hvis man ikke har med mu!!!
   matcoef <- data.frame(Estimates = fit$par,
                     SD = sqrt(diag(solve(f$he(fit$par)))))
