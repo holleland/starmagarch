@@ -5,20 +5,20 @@ Authors@R: person("Sondre", "Hølleland", email = "sondre.holleland@uib.no", rol
 Description: The starmagarch package provides functions for simulating and
     estimating spatio-temporal ARMA-GARCH models. 
 Depends: R (>= 3.5.2)
-License: What license is it under?
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Imports:
     TMB (>= 1.7.15),
-    Rcpp,
-    RcppEigen,
+    RcppEigen(>= 0.3.3.5.0),
     spdep (>= 1.0-2),
-    ggpubr(>= 0.2)
+    ggpubr(>= 0.2),
+    ggplot2 (>= 3.1.1),
+    reshape2 (>= 1.4.3)
 RoxygenNote: 6.1.1
 LinkingTo: 
-    Rcpp,
     TMB  (>= 1.7.15),
-    RcppEigen
+    RcppEigen(>= 0.3.3.5.0)
 Suggests: 
     testthat,
     knitr,
