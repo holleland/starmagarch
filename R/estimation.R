@@ -174,24 +174,25 @@ plot.starmagarch <- function(object){
   tmp2$type <- "Observations"
   tmp <- rbind(tmp,tmp2)
   #Plotting with ggplot2:
-  mytheme <- theme(
+  mytheme <- ggplot2::theme(
     #legend.title = element_blank(),
-    axis.line = element_line(),
+    axis.line = ggplot2::element_line(),
     strip.placement = "outside",
-    strip.text = element_text(size = 11),
-    panel.grid.major = element_blank(),
-    panel.grid.minor = element_blank(),
-    panel.background = element_blank(),
-    panel.border = element_blank())
+    strip.text = ggplot2::element_text(size = 11),
+    panel.grid.major = ggplot2::element_blank(),
+    panel.grid.minor = ggplot2::element_blank(),
+    panel.background = ggplot2::element_blank(),
+    panel.border = ggplot2::element_blank())
   p <- ggplot2::ggplot(data=transform(tmp,
                                       type = factor(type, levels = c("Observations","Fitted values"))),
-                       aes(tmp$Var2,tmp$Var1))+ggplot2::geom_raster(aes(fill=tmp$value))+
-    ggplot2::xlab("Time")+ggplot2::ylab("Space")+theme_bw()+mytheme+
-    scale_fill_gradient2(low = "blue", mid = "white", high = "red",
+                       ggplot2::aes(tmp$Var2,tmp$Var1))+ggplot2::geom_raster(ggplot2::aes(fill=tmp$value))+
+    ggplot2::xlab("Time")+ggplot2::ylab("Space")+ggplot2::theme_bw()+mytheme+
+    ggplot2::scale_fill_gradient2(low = "blue", mid = "white", high = "red",
                          midpoint = object$coefficients["mu"])+
-    facet_wrap(~type, ncol = 1)+
-    scale_y_continuous(expand = c(0,0)) + scale_x_continuous(expand = c(0,0))+
-    guides(fill = guide_colorbar(barwidth = 1, barheight = 10, title="Value"))
+    ggplot2::facet_wrap(~type, ncol = 1)+
+    ggplot2::scale_y_continuous(expand = c(0,0)) +
+    ggplot2::scale_x_continuous(expand = c(0,0))+
+    ggplot2::guides(fill = ggplot2::guide_colorbar(barwidth = 1, barheight = 10, title="Value"))
   return(p)
 }
 
@@ -220,47 +221,59 @@ plot_garch.starmagarch <- function(object){
   tmp3$type <- "Standardized residuals"
   tmp <- rbind(tmp,tmp2,tmp3)
   #Plotting with ggplot2:
-  mytheme <- theme(
-    legend.title = element_blank(),
-    axis.line = element_line(),
+  mytheme <- ggplot2::theme(
+    legend.title = ggplot2::element_blank(),
+    axis.line = ggplot2::element_line(),
     strip.placement = "outside",
-    strip.text = element_text(size = 11),
-    panel.grid.major = element_blank(),
-    panel.grid.minor = element_blank(),
-    panel.background = element_blank(),
-    panel.border = element_blank())
+    strip.text = ggplot2::element_text(size = 11),
+    panel.grid.major = ggplot2::element_blank(),
+    panel.grid.minor = ggplot2::element_blank(),
+    panel.background = ggplot2::element_blank(),
+    panel.border = ggplot2::element_blank())
   p1 <- ggplot2::ggplot(data=tmp[tmp$type=="GARCH process",],
-                       aes(Var2,Var1))+ggplot2::geom_raster(aes(fill=value))+
-    ggplot2::xlab("Time")+ggplot2::ylab("Space")+theme_bw()+mytheme+
-    scale_fill_gradient2(low = "blue", mid = "white", high = "red",
+                       ggplot2::aes(Var2,Var1))+ggplot2::geom_raster(ggplot2::aes(fill=value))+
+    ggplot2::xlab("Time")+ggplot2::ylab("Space")+
+    ggplot2::theme_bw()+mytheme+
+    ggplot2::scale_fill_gradient2(low = "blue", mid = "white", high = "red",
                          midpoint = 0.0)+
-    facet_wrap(~type, ncol = 1)+theme(axis.line.x = element_blank())+
-    scale_y_continuous(expand = c(0,0)) + scale_x_continuous(expand = c(0,0))
+    ggplot2::facet_wrap(~type, ncol = 1)+
+    ggplot2::theme(axis.line.x = ggplot2::element_blank())+
+    ggplot2::scale_y_continuous(expand = c(0,0)) +
+    ggplot2::scale_x_continuous(expand = c(0,0))
   p2 <- ggplot2::ggplot(data=tmp[tmp$type=="Fitted sigma",],
-                        aes(Var2,Var1))+ggplot2::geom_raster(aes(fill=value))+
-    ggplot2::xlab("Time")+ggplot2::ylab("Space")+theme_bw()+mytheme+
-    scale_fill_gradient2(low = "blue", mid = "white", high = "red",
+                        ggplot2::aes(Var2,Var1))+ggplot2::geom_raster(ggplot2::aes(fill=value))+
+    ggplot2::xlab("Time")+ggplot2::ylab("Space")+
+    ggplot2::theme_bw()+mytheme+
+    ggplot2::scale_fill_gradient2(low = "blue", mid = "white", high = "red",
                          midpoint = mean(object$sigma))+
-    facet_wrap(~type, ncol = 1)+theme(axis.line.x = element_blank())+
-    scale_y_continuous(expand = c(0,0)) + scale_x_continuous(expand = c(0,0))
+    ggplot2::facet_wrap(~type, ncol = 1)+
+    ggplot2::theme(axis.line.x = ggplot2::element_blank())+
+    ggplot2::scale_y_continuous(expand = c(0,0)) +
+    ggplot2::scale_x_continuous(expand = c(0,0))
   p3 <- ggplot2::ggplot(data=tmp[tmp$type=="Standardized residuals",],
-                        aes(Var2,Var1))+ggplot2::geom_raster(aes(fill=value))+
-    ggplot2::xlab("Time")+ggplot2::ylab("Space")+theme_bw()+mytheme+
-    scale_fill_gradient2(low = "blue", mid = "white", high = "red",
+                        ggplot2::aes(Var2,Var1))+ggplot2::geom_raster(ggplot2::aes(fill=value))+
+    ggplot2::xlab("Time")+ggplot2::ylab("Space")+
+    ggplot2::theme_bw()+mytheme+
+    ggplot2::scale_fill_gradient2(low = "blue", mid = "white", high = "red",
                          midpoint = 0.0)+
-    facet_wrap(~type, ncol = 1)+
-    scale_y_continuous(expand = c(0,0)) + scale_x_continuous(expand = c(0,0))
+    ggplot2::facet_wrap(~type, ncol = 1)+
+    ggplot2::scale_y_continuous(expand = c(0,0)) +
+    ggplot2::scale_x_continuous(expand = c(0,0))
 
   ggfigure <- ggpubr::ggarrange(
     p1+ggplot2::ylab("")+ggplot2::xlab("")+
-      ggplot2::theme(axis.text.x=element_blank(),axis.line.x=element_blank(),
-                     plot.margin=unit(c(0.05,0,0,0),"cm" ), axis.ticks.x=element_blank()),
+      ggplot2::theme(axis.text.x=ggplot2::element_blank(),
+                     axis.line.x=ggplot2::element_blank(),
+                     plot.margin=ggplot2::unit(c(0.05,0,0,0),"cm" ),
+                     axis.ticks.x=ggplot2::element_blank()),
     p2+ggplot2::ylab("")+ggplot2::xlab("")+
-      ggplot2::theme(axis.text.x=element_blank(),axis.line.x=element_blank(),
-                     plot.margin=unit(c(0.05,0,0,0),"cm" ), axis.ticks.x=element_blank()),
+      ggplot2::theme(axis.text.x=ggplot2::element_blank(),
+                     axis.line.x=ggplot2::element_blank(),
+                     plot.margin=ggplot2::unit(c(0.05,0,0,0),"cm" ),
+                     axis.ticks.x=ggplot2::element_blank()),
     p3+ggplot2::ylab("")+ggplot2::xlab("")+
-      ggplot2::theme(plot.margin=unit(c(0.05,0,0,0),"cm" )), ncol=1,nrow=3,align="v",
-    common.legend = FALSE, legend = "right")
+      ggplot2::theme(plot.margin=ggplot2::unit(c(0.05,0,0,0),"cm" )), ncol=1,nrow=3,align="v",
+                     common.legend = FALSE, legend = "right")
   ggpubr::annotate_figure(ggfigure,
                   bottom = ggpubr::text_grob("Time", color = "black", size = 11,vjust=-1.5),
                   left = ggpubr::text_grob("Space", color = "black", rot = 90,size=11,vjust=1.7,
