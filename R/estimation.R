@@ -46,12 +46,12 @@ CreateLikelihood <- function(data, W=NULL, init=apply(data, 1, var), parameters 
 #' @return \code{starmagarch} object.
 fitSTARMAGARCH <- function(f, data=NULL,  print = TRUE){
   fit <- nlminb(f$par,f$fn,f$gr, f$he,
-                lower=c(-10,
+                lower=c(-1e4,
                         rep(-5,length(which(names(f$par)%in% c("phi","theta")))),
                         1e-8,
                         rep(1e-8, length(which(names(f$par) %in% c("alpha","beta"))))),
-                upper=c(10,rep(5,length(which(names(f$par)%in% c("phi","theta")))),
-                        500, rep(1,length(which(names(f$par) %in% c("alpha","beta"))))))
+                upper=c(1e4,rep(5,length(which(names(f$par)%in% c("phi","theta")))),
+                        1e4, rep(1,length(which(names(f$par) %in% c("alpha","beta"))))))
   # Problemer her hvis man ikke har med mu!!!
   matcoef <- data.frame(Estimates = fit$par,
                     SD = sqrt(diag(solve(f$he(fit$par)))))

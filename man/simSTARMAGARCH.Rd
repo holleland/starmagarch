@@ -5,7 +5,7 @@
 \title{Simulation of STARMAGARCH}
 \usage{
 simSTARMAGARCH(parameters, n = 100, m = c(5, 5), W = NULL,
-  burnin = 300, type = "rook", torus = TRUE)
+  burnin = 0, type = "rook", torus = TRUE)
 }
 \arguments{
 \item{parameters}{List of parameters.}
