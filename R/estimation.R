@@ -8,8 +8,8 @@
 #' @param init Initial value of sigma
 #' @param parameters List of initial parameters
 #' @param map List of same size as parameters, determining which parameters should be fixed.
-#' @param siltent Logical, indicating wheter optimization print-out should be printet.
-#' @example examples/CreateLikelihood_example.R
+#' @param silent Logical, indicating wheter optimization print-out should be printet.
+#' @example inst/CreateLikelihood_example.R
 #' @return List containing automatic differentiated likelihood function.
 #'
 #' @export
@@ -42,16 +42,19 @@ CreateLikelihood <- function(data, W=NULL, init=apply(data, 1, var), parameters 
 #' @param f object produced by CreateLikelihood
 #' @param upper upper limits for parameter estimates
 #' @param lower lower limits for parameters esimates
+#' @param print logical, indicator for printing summary
 #' @export
 #' @return \code{starmagarch} object.
-fitSTARMAGARCH <- function(f, data=NULL,  print = TRUE){
+fitSTARMAGARCH <- function(f, data=NULL,  print = TRUE,
+                           lower = c(-1e4,
+                                     rep(-5,length(which(names(f$par)%in% c("phi","theta")))),
+                                     1e-8,
+                                     rep(1e-8, length(which(names(f$par) %in% c("alpha","beta"))))),
+                            upper = c(1e4,rep(5,length(which(names(f$par)%in% c("phi","theta")))),
+                                      1e4, rep(1,length(which(names(f$par) %in% c("alpha","beta")))))){
   fit <- nlminb(f$par,f$fn,f$gr, f$he,
-                lower=c(-1e4,
-                        rep(-5,length(which(names(f$par)%in% c("phi","theta")))),
-                        1e-8,
-                        rep(1e-8, length(which(names(f$par) %in% c("alpha","beta"))))),
-                upper=c(1e4,rep(5,length(which(names(f$par)%in% c("phi","theta")))),
-                        1e4, rep(1,length(which(names(f$par) %in% c("alpha","beta"))))))
+                lower=lower,
+                upper=upper)
   # Problemer her hvis man ikke har med mu!!!
   matcoef <- data.frame(Estimates = fit$par,
                     SD = sqrt(diag(solve(f$he(fit$par)))))
@@ -95,7 +98,7 @@ NULL
 summary.starmagarch <- function(object) {
   print(object$matcoef)
   cat("\n\nStandardized residual standard error: ", round(sd(object$garch/object$sigma),3),".\n",
-      "AIC: ", object$aic,"\t BIC: ", object$bic)
+      "AIC: ", AIC(object),"\t BIC: ", BIC(object))
 }
 
 #' Extract model coefficients
