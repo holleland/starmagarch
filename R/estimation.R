@@ -116,7 +116,7 @@ NULL
 summary.starmagarch <- function(object,...) {
   print(object$matcoef)
   cat("\n\nStandardized residual standard error: ", round(sd(object$garch/object$sigma),3),".\n",
-      "AIC: ", AIC(object),"\t BIC: ", BIC(object))
+      "AIC: ", AIC(object),"\t BIC: ", BIC(object),"\n")
 }
 
 #' Extract model coefficients
@@ -127,7 +127,14 @@ summary.starmagarch <- function(object,...) {
 #' @export
 coef.starmagarch <- function(object,...) object$coefficients
 
-
+#' Print starmagarch
+#'
+#' @rdname genfunctions
+#' @return Printout
+#' @export
+print.starmagarch <- function(object){
+  summary(object)
+}
 
 #' Extract fitted sigma process
 #'
