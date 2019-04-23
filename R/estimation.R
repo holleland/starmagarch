@@ -32,7 +32,7 @@ CreateLikelihood <- function(data, W=NULL, init=apply(data, 1, var), parameters 
   if(class(W)!="array") stop("W must be an array.")
 
   # Createing AD function (the QML function)
-    return(TMB::MakeADFun(data = list(y=data, W=W,init = init, siltent =TRUE),
+    return(TMB::MakeADFun(data = list(y=data, W=W,init = init),
                    parameters = parameters[c("mu", "phi", "theta","omega", "alpha", "beta")],
                    DLL = "STARMAGARCH", map = map, silent = silent))
 }
