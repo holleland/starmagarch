@@ -77,6 +77,7 @@ fitSTARMAGARCH <- function(f, data=NULL,  print = TRUE,
   obj$optimization <- fit
   obj$aic <- fit$objective+2*length(fit$par)
   obj$bic <- fit$objective+log(prod(obj$dim))*length(fit$par)
+  obj$sdreport <- sdreport(fit)
   if(print) print(matcoef)
   return(obj)
 }
