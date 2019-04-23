@@ -4,6 +4,7 @@
 \alias{genfunctions}
 \alias{summary.starmagarch}
 \alias{coef.starmagarch}
+\alias{print.starmagarch}
 \alias{sigma.starmagarch}
 \alias{fittedgarch.starmagarch}
 \alias{fitted.starmagarch}
@@ -13,6 +14,8 @@
 \method{summary}{starmagarch}(object, ...)
 
 \method{coef}{starmagarch}(object, ...)
+
+\method{print}{starmagarch}(object)
 
 \method{sigma}{starmagarch}(object)
 
@@ -29,6 +32,8 @@
 \code{summary}: Summary statistics of fitted model.
 
 \code{coef}: Coefficients of fitted model.
+
+Printout
 
 \code{sigma}: Fitted sigma process, \eqn{\{ \sigma_t(u) \}}.
 
