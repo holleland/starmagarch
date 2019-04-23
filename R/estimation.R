@@ -53,6 +53,10 @@ fitSTARMAGARCH <- function(f, data=NULL,  print = TRUE,
                                      rep(1e-8, length(which(names(f$par) %in% c("alpha","beta"))))),
                             upper = c(1e4,rep(5,length(which(names(f$par)%in% c("phi","theta")))),
                                       1e4, rep(1,length(which(names(f$par) %in% c("alpha","beta")))))){
+  if(length(lower)!=length(upper)) stop("upper and lower limits must be of same length.")
+  if(length(lower)!=length(f$par)) stop("lower be of same length as the number of parameters.")
+  if(length(upper)!=length(f$par)) stop("upper be of same length as the number of parameters.")
+
   fit <- nlminb(f$par,f$fn,f$gr, f$he,
                 lower=lower,
                 upper=upper)
