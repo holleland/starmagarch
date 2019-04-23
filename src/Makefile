@@ -1,6 +1,6 @@
-all:	STARMAGARCH.so
+all:	STARMAGARCH.o
 
-STARMAGARCH.so:	STARMAGARCH.cpp
+STARMAGARCH.o:	STARMAGARCH.cpp
     Rscript --vanilla -e "TMB::compile('STARMAGARCH.cpp','-O0 -g')"
 
 clean:	rm -rf *o
