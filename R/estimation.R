@@ -40,6 +40,7 @@ CreateLikelihood <- function(data, W=NULL, init=apply(data, 1, var), parameters 
 #' Optimize likelihood using nlminb
 #'
 #' @param f object produced by CreateLikelihood
+#' @param data Data matrix (spatial row index, temporal col index)
 #' @param upper upper limits for parameter estimates
 #' @param lower lower limits for parameters esimates
 #' @param print logical, indicator for printing summary
@@ -80,6 +81,23 @@ fitSTARMAGARCH <- function(f, data=NULL,  print = TRUE,
   return(obj)
 }
 
+#' Information criterions
+#'
+#' Akaike's and Bayesian information criterion of a fitted starmagarch model.
+#'
+#' @name aic
+#' @param object \code{starmagarch} object
+#' @return \code{AIC}: AIC of fitted model.
+#' @export
+AIC.starmagarch <- function(object,...) object$aic
+#' Bayesian information criterion
+#'
+#' @rdname aic
+#' @return \code{BIC}: BIC of fitted model.
+#' @export
+BIC.starmagarch <- function(object,...) object$bic
+
+
 #' Methods for \code{starmagarch} objects
 #'
 #' Collection of generic functions for \code{starmagarch} objects.
@@ -95,7 +113,7 @@ NULL
 #' @rdname genfunctions
 #' @return \code{summary}: Summary statistics of fitted model.
 #' @export
-summary.starmagarch <- function(object) {
+summary.starmagarch <- function(object,...) {
   print(object$matcoef)
   cat("\n\nStandardized residual standard error: ", round(sd(object$garch/object$sigma),3),".\n",
       "AIC: ", AIC(object),"\t BIC: ", BIC(object))
@@ -107,23 +125,7 @@ summary.starmagarch <- function(object) {
 #' @rdname genfunctions
 #' @return \code{coef}: Coefficients of fitted model.
 #' @export
-coef.starmagarch <- function(object) object$coefficients
-
-#' Information criterions
-#'
-#' Akaike's and Bayesian information criterion of a fitted starmagarch model.
-#'
-#' @param object \code{starmagarch} object
-#' @name aic
-#' @return \code{AIC}: AIC of fitted model.
-#' @export
-AIC.starmagarch <- function(object) object$aic
-#' Bayesian information criterion
-#'
-#' @rdname aic
-#' @return \code{BIC}: BIC of fitted model.
-#' @export
-BIC.starmagarch <- function(object) object$bic
+coef.starmagarch <- function(object,...) object$coefficients
 
 
 
@@ -141,14 +143,14 @@ fittedgarch <- function(x) UseMethod("fittedgarch")
 #' @rdname genfunctions
 #' @return \code{fittedgarch}: Extract ARMA-residuals (the garch process): \eqn{\widehat y_t(u)}
 #' @export
-fittedgarch.starmagarch <- function(object) object$garch
+fittedgarch.starmagarch <- function(object,...) object$garch
 
 #' Extract fitted sigma process
 #'
 #' @rdname genfunctions
 #' @return \code{fitted}: Fitted values of the ARMA process.
 #' @export
-fitted.starmagarch <- function(object) object$fitted.values
+fitted.starmagarch <- function(object,...) object$fitted.values
 
 #' Extract model residuals
 #'
@@ -158,7 +160,7 @@ fitted.starmagarch <- function(object) object$fitted.values
 #' @return \code{residuals}:  Extract standardized residuals of fitted model:
 #' \eqn{z_t(u) = x_t(u) / \sigma_t(u)}
 #' @export
-residuals.starmagarch <- function(object) fittedgarch(object)/sigma(object)
+residuals.starmagarch <- function(object,...) fittedgarch(object)/sigma(object)
 
 #' Plot \code{starmgarch}
 #'
@@ -169,7 +171,7 @@ residuals.starmagarch <- function(object) fittedgarch(object)/sigma(object)
 #' @param object Class \code{starmagarch}
 #' @return ggplot object
 #' @export
-plot.starmagarch <- function(object){
+plot.starmagarch <- function(object,...){
   # Creating a long format:
   tmp <- reshape2::melt(fitted(object))
   tmp2 <- reshape2::melt(object$observations)
@@ -203,7 +205,7 @@ plot.starmagarch <- function(object){
 #'
 #' @param x Object
 #' @export
-plot_garch <- function(x) UseMethod("plot_garch")
+plot_garch <- function(object,...) UseMethod("plot_garch")
 
 #' Plot \code{starmgarch}
 #'
@@ -211,10 +213,9 @@ plot_garch <- function(x) UseMethod("plot_garch")
 #'
 #'
 #' @rdname plotting
-#' @param object Class \code{starmagarch}
 #' @return ggplot object
 #' @export
-plot_garch.starmagarch <- function(object){
+plot_garch.starmagarch <- function(object,...){
   # Creating a long format:
   tmp <- reshape2::melt(fittedgarch(object))
   tmp2 <- reshape2::melt(sigma(object))

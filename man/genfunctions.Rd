@@ -10,17 +10,17 @@
 \alias{residuals.starmagarch}
 \title{Methods for \code{starmagarch} objects}
 \usage{
-\method{summary}{starmagarch}(object)
+\method{summary}{starmagarch}(object, ...)
 
-\method{coef}{starmagarch}(object)
+\method{coef}{starmagarch}(object, ...)
 
 \method{sigma}{starmagarch}(object)
 
-\method{fittedgarch}{starmagarch}(object)
+\method{fittedgarch}{starmagarch}(object, ...)
 
-\method{fitted}{starmagarch}(object)
+\method{fitted}{starmagarch}(object, ...)
 
-\method{residuals}{starmagarch}(object)
+\method{residuals}{starmagarch}(object, ...)
 }
 \arguments{
 \item{object}{\code{starmagarch} object}

@@ -18,7 +18,7 @@ CreateLikelihood(data, W = NULL, init = apply(data, 1, var),
 
 \item{map}{List of same size as parameters, determining which parameters should be fixed.}
 
-\item{siltent}{Logical, indicating wheter optimization print-out should be printet.}
+\item{silent}{Logical, indicating wheter optimization print-out should be printet.}
 }
 \value{
 List containing automatic differentiated likelihood function.

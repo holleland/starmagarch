@@ -4,7 +4,7 @@
 \alias{plot_garch}
 \title{generic function}
 \usage{
-plot_garch(x)
+plot_garch(object, ...)
 }
 \arguments{
 \item{x}{Object}

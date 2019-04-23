@@ -6,9 +6,9 @@
 \alias{BIC.starmagarch}
 \title{Information criterions}
 \usage{
-\method{AIC}{starmagarch}(object)
+\method{AIC}{starmagarch}(object, ...)
 
-\method{BIC}{starmagarch}(object)
+\method{BIC}{starmagarch}(object, ...)
 }
 \arguments{
 \item{object}{\code{starmagarch} object}
