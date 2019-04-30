@@ -6,12 +6,14 @@
 \alias{plot_garch.starmagarch}
 \title{Plot \code{starmgarch}}
 \usage{
-\method{plot}{starmagarch}(object, ...)
+\method{plot}{starmagarch}(object)
 
 \method{plot_garch}{starmagarch}(object, ...)
 }
 \arguments{
 \item{object}{Class \code{starmagarch}}
+
+\item{...}{additional arguments.}
 }
 \value{
 ggplot object

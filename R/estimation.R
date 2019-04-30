@@ -91,9 +91,12 @@ fitSTARMAGARCH <- function(f, data=NULL,  print = TRUE,
 #'
 #' @name aic
 #' @param object \code{starmagarch} object
+#' @param ... optionally more fitted model objects.
 #' @return \code{AIC}: AIC of fitted model.
 #' @export
 AIC.starmagarch <- function(object,...) object$aic
+
+BIC <- function(x) UseMethod("BIC")
 #' Bayesian information criterion
 #'
 #' @rdname aic
@@ -107,6 +110,7 @@ BIC.starmagarch <- function(object,...) object$bic
 #' Collection of generic functions for \code{starmagarch} objects.
 #'
 #' @param object \code{starmagarch} object
+#' @param ... optionally more fitted model objects.
 #' @name genfunctions
 #'
 NULL
@@ -140,6 +144,7 @@ print.starmagarch <- function(object){
   summary(object)
 }
 
+sigma<- function(x) UseMethod("sigma")
 #' Extract fitted sigma process
 #'
 #'
@@ -180,9 +185,10 @@ residuals.starmagarch <- function(object,...) fittedgarch(object)/sigma(object)
 #'
 #' @name plotting
 #' @param object Class \code{starmagarch}
+#' @param ... additional arguments.
 #' @return ggplot object
 #' @export
-plot.starmagarch <- function(object,...){
+plot.starmagarch <- function(object){
   # Creating a long format:
   tmp <- reshape2::melt(fitted(object))
   tmp2 <- reshape2::melt(object$observations)
@@ -214,7 +220,8 @@ plot.starmagarch <- function(object,...){
 
 #' generic function
 #'
-#' @param x Object
+#' @param object Object
+#' @param ... additional arguments
 #' @export
 plot_garch <- function(object,...) UseMethod("plot_garch")
 

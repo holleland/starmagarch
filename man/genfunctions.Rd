@@ -27,6 +27,8 @@
 }
 \arguments{
 \item{object}{\code{starmagarch} object}
+
+\item{...}{optionally more fitted model objects.}
 }
 \value{
 \code{summary}: Summary statistics of fitted model.

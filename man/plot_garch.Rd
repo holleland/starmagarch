@@ -7,7 +7,9 @@
 plot_garch(object, ...)
 }
 \arguments{
-\item{x}{Object}
+\item{object}{Object}
+
+\item{...}{additional arguments}
 }
 \description{
 generic function

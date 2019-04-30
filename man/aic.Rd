@@ -12,6 +12,8 @@
 }
 \arguments{
 \item{object}{\code{starmagarch} object}
+
+\item{...}{optionally more fitted model objects.}
 }
 \value{
 \code{AIC}: AIC of fitted model.
