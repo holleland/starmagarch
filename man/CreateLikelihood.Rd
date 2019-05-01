@@ -4,7 +4,7 @@
 \alias{CreateLikelihood}
 \title{Function for estimating circular ARMAGARCH}
 \usage{
-CreateLikelihood(data, W = NULL, init = apply(data, 1, var),
+CreateLikelihood(data, W = NULL, init = apply(data, 1, stats::var),
   parameters = NULL, map = NULL, silent = TRUE)
 }
 \arguments{

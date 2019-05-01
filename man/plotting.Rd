@@ -6,7 +6,7 @@
 \alias{plot_garch.starmagarch}
 \title{Plot \code{starmgarch}}
 \usage{
-\method{plot}{starmagarch}(object)
+\method{plot}{starmagarch}(object, ...)
 
 \method{plot_garch}{starmagarch}(object, ...)
 }

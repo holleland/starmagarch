@@ -15,7 +15,7 @@
 
 \method{coef}{starmagarch}(object, ...)
 
-\method{print}{starmagarch}(object)
+\method{print}{starmagarch}(object, ...)
 
 \method{sigma}{starmagarch}(object)
 

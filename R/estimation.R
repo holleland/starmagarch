@@ -15,7 +15,7 @@
 #' @export
 #' @useDynLib STARMAGARCH
 #'
-CreateLikelihood <- function(data, W=NULL, init=apply(data, 1, var), parameters = NULL, map=NULL, silent=TRUE){
+CreateLikelihood <- function(data, W=NULL, init=apply(data, 1, stats::var), parameters = NULL, map=NULL, silent=TRUE){
   # Controlling input:
   if(length(dim(W))<3) stop("W must be array of dimension 3.")
   if(nrow(data)!=dim(W)[1]) stop("data must have the same number of rows as W.")
@@ -57,14 +57,14 @@ fitSTARMAGARCH <- function(f, data=NULL,  print = TRUE,
   if(length(lower)!=length(f$par)) stop("lower be of same length as the number of parameters.")
   if(length(upper)!=length(f$par)) stop("upper be of same length as the number of parameters.")
 
-  fit <- nlminb(f$par,f$fn,f$gr, f$he,
+  fit <- stats::nlminb(f$par,f$fn,f$gr, f$he,
                 lower=lower,
                 upper=upper)
   # Problemer her hvis man ikke har med mu!!!
   matcoef <- data.frame(Estimates = fit$par,
                     SD = sqrt(diag(solve(f$he(fit$par)))))
   matcoef$Zscore <- matcoef$Estimates/matcoef$SD
-  matcoef$Pvalue <- pnorm(abs(matcoef$Zscore), lower.tail=FALSE)
+  matcoef$Pvalue <- stats::pnorm(abs(matcoef$Zscore), lower.tail=FALSE)
 # Row names problem:
   rownames(matcoef)<-correct.names(names(f$par))
   obj <- list()
@@ -140,7 +140,7 @@ coef.starmagarch <- function(object,...) object$coefficients
 #' @rdname genfunctions
 #' @return Printout
 #' @export
-print.starmagarch <- function(object){
+print.starmagarch <- function(object,...){
   summary(object)
 }
 
@@ -188,7 +188,7 @@ residuals.starmagarch <- function(object,...) fittedgarch(object)/sigma(object)
 #' @param ... additional arguments.
 #' @return ggplot object
 #' @export
-plot.starmagarch <- function(object){
+plot.starmagarch <- function(object,...){
   # Creating a long format:
   tmp <- reshape2::melt(fitted(object))
   tmp2 <- reshape2::melt(object$observations)
