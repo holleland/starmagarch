@@ -27,12 +27,15 @@ plot_garch(fit)
 qqnorm(residuals(fit), pch = 19)
 qqline(residuals(fit), col = "red")
 
+# ---------------------------------
+# ------ MUST BE FIXED ------------
+# ---------------------------------
 #Set parameters$beta[2,1] to zero:
-map <- parameterlist2maptemplate(parameters)
-map$beta[2,1]<-as.factor(NA)
-parameters$beta[2,1]<-0
-f <- CreateLikelihood(y, W=W,
-                      init = apply(y,1,var), parameters=parameters, map = map)
-
+#map <- parameterlist2maptemplate(parameters)
+#map$beta[2,1]<-as.factor(NA)
+#parameters$beta[2,1]<-0
+#f <- CreateLikelihood(y, W=W,
+#                      init = apply(y,1,var), parameters=parameters, map = map)
+#
 # Optimize the likelihood using:
-fit <- fitSTARMAGARCH(f, data= y, parameters, print = FALSE)
+#fit <- fitSTARMAGARCH(f, data= y, parameters, print = FALSE)
