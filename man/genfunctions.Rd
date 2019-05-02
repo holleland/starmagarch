@@ -2,17 +2,15 @@
 % Please edit documentation in R/estimation.R
 \name{genfunctions}
 \alias{genfunctions}
-\alias{summary.starmagarch}
 \alias{coef.starmagarch}
 \alias{print.starmagarch}
 \alias{sigma.starmagarch}
 \alias{fittedgarch.starmagarch}
 \alias{fitted.starmagarch}
 \alias{residuals.starmagarch}
+\alias{summary.starmagarch}
 \title{Methods for \code{starmagarch} objects}
 \usage{
-\method{summary}{starmagarch}(object, ...)
-
 \method{coef}{starmagarch}(object, ...)
 
 \method{print}{starmagarch}(object, ...)
@@ -24,6 +22,8 @@
 \method{fitted}{starmagarch}(object, ...)
 
 \method{residuals}{starmagarch}(object, ...)
+
+\method{summary}{starmagarch}(object, ...)
 }
 \arguments{
 \item{object}{\code{starmagarch} object}
@@ -31,8 +31,6 @@
 \item{...}{optionally more fitted model objects.}
 }
 \value{
-\code{summary}: Summary statistics of fitted model.
-
 \code{coef}: Coefficients of fitted model.
 
 Printout
@@ -45,6 +43,8 @@ Printout
 
 \code{residuals}:  Extract standardized residuals of fitted model:
 \eqn{z_t(u) = x_t(u) / \sigma_t(u)}
+
+\code{summary}: Summary statistics of fitted model.
 }
 \description{
 Collection of generic functions for \code{starmagarch} objects.

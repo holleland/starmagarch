@@ -115,17 +115,7 @@ BIC.starmagarch <- function(object,...) object$bic
 #'
 NULL
 
-#' Summary of \code{starmagarch} object.
-#'
-#'
-#' @rdname genfunctions
-#' @return \code{summary}: Summary statistics of fitted model.
-#' @export
-summary.starmagarch <- function(object,...) {
-  print(object$matcoef)
-  cat("\n\nStandardized residual standard error: ", round(sd(object$garch/object$sigma),3),".\n",
-      "AIC: ", AIC(object),"\t BIC: ", BIC(object),"\n")
-}
+
 
 #' Extract model coefficients
 #'
@@ -390,3 +380,14 @@ correct.names <- function(names){
   names
 }
 
+#' Summary of \code{starmagarch} object.
+#'
+#'
+#' @rdname genfunctions
+#' @return \code{summary}: Summary statistics of fitted model.
+#' @export
+summary.starmagarch <- function(object,...) {
+  print(object$matcoef)
+  cat("\n\nStandardized residual standard error: ", round(sd(object$garch/object$sigma),3),".\n",
+      "AIC: ", AIC.starmagarch(object),"\t BIC: ", BIC.starmagarch(object),"\n")
+}
