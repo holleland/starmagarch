@@ -15,7 +15,7 @@
 
 \method{print}{starmagarch}(object, ...)
 
-\method{sigma}{starmagarch}(object)
+\method{sigma}{starmagarch}(object, use.fallback = TRUE, ...)
 
 \method{fittedgarch}{starmagarch}(object, ...)
 
@@ -29,6 +29,8 @@
 \item{object}{\code{starmagarch} object}
 
 \item{...}{optionally more fitted model objects.}
+
+\item{use.fallback}{logical, passed to nobs}
 }
 \value{
 \code{coef}: Coefficients of fitted model.

@@ -96,13 +96,13 @@ fitSTARMAGARCH <- function(f, data=NULL,  print = TRUE,
 #' @export
 AIC.starmagarch <- function(object,...) object$aic
 
-BIC <- function(x) UseMethod("BIC")
+#BIC <- function(x, ...) UseMethod("BIC")
 #' Bayesian information criterion
 #'
 #' @rdname aic
 #' @return \code{BIC}: BIC of fitted model.
 #' @export
-BIC.starmagarch <- function(object,...) object$bic
+BIC.starmagarch <- function(object, ...) object$bic
 
 
 #' Methods for \code{starmagarch} objects
@@ -110,6 +110,7 @@ BIC.starmagarch <- function(object,...) object$bic
 #' Collection of generic functions for \code{starmagarch} objects.
 #'
 #' @param object \code{starmagarch} object
+#' @param use.fallback logical, passed to nobs
 #' @param ... optionally more fitted model objects.
 #' @name genfunctions
 #'
@@ -134,14 +135,14 @@ print.starmagarch <- function(object,...){
   summary(object)
 }
 
-sigma<- function(x) UseMethod("sigma")
+#sigma<- function(x,...) UseMethod("sigma")
 #' Extract fitted sigma process
 #'
 #'
 #' @rdname genfunctions
 #' @return \code{sigma}: Fitted sigma process, \eqn{\{ \sigma_t(u) \}}.
 #' @export
-sigma.starmagarch <- function(object) object$sigma
+sigma.starmagarch <- function(object, use.fallback = TRUE, ...) object$sigma
 
 fittedgarch <- function(x) UseMethod("fittedgarch")
 #' Extract fitted sigma process
@@ -304,8 +305,9 @@ plot_garch.starmagarch <- function(object,...){
 #' @param arch Integer of length 2 (spatial, temporal): Spatio-temporal order of ARCH part
 #' @param garch Integer of length 2 (spatial, temporal): Spatio-temporal order of GARCH part
 #' @export
-parvector2list <- function(par, ar = c(2,1), ma = c(2,1),
+parvector2list <- function(par = NULL, ar = c(2,1), ma = c(2,1),
                            arch = c(2,1), garch = c(2,1)){
+  if(is.null(par)) par <- rep(0, times = 2+sum(prod(ar), prod(ma),prod(arch),prod(garch)))
   if(length(par) != 2+sum(prod(ar), prod(ma),prod(arch),prod(garch)))
     stop("Length of parameter vector does not match the order of the model.")
   if(length(ar)!=2) stop("ar must be of length 2.")
