@@ -46,26 +46,32 @@ CreateLikelihood <- function(data, W=NULL, init=apply(data, 1, stats::var), para
 #' @param print logical, indicator for printing summary
 #' @export
 #' @return \code{starmagarch} object.
-fitSTARMAGARCH <- function(f, data=NULL,  print = TRUE,
-                           lower = c(-1e4,
-                                     rep(-5,length(which(names(f$par)%in% c("phi","theta")))),
-                                     1e-8,
-                                     rep(1e-8, length(which(names(f$par) %in% c("alpha","beta"))))),
-                            upper = c(1e4,rep(5,length(which(names(f$par)%in% c("phi","theta")))),
-                                      1e4, rep(1,length(which(names(f$par) %in% c("alpha","beta")))))){
+fitSTARMAGARCH <- function(f, data=NULL,  print = TRUE, lower = NULL, upper = NULL) {
+  # Setting limits if not specified by user:
+  if(is.null(lower))
+    lower <- c(rep(-1e4, length(which(names(f$par) == "mu"))),
+      rep(-5,length(which(names(f$par)%in% c("phi","theta")))),
+      rep(-1e-8, length(which(names(f$par) =="omega"))),
+      rep(1e-8, length(which(names(f$par) %in% c("alpha","beta")))))
+  if(is.null(upper))
+    upper <- c(rep(1e4, length(which(names(f$par) == "mu"))),
+              rep(5,length(which(names(f$par)%in% c("phi","theta")))),
+              rep(1e4, length(which(names(f$par) == "omega"))),
+              rep(1,length(which(names(f$par) %in% c("alpha","beta")))))
   if(length(lower)!=length(upper)) stop("upper and lower limits must be of same length.")
   if(length(lower)!=length(f$par)) stop("lower be of same length as the number of parameters.")
   if(length(upper)!=length(f$par)) stop("upper be of same length as the number of parameters.")
 
+  # Optimization:
   fit <- stats::nlminb(f$par,f$fn,f$gr, f$he,
-                lower=lower,
-                upper=upper)
+                lower = lower,
+                upper = upper)
   # Problemer her hvis man ikke har med mu!!!
   matcoef <- data.frame(Estimates = fit$par,
                     SD = sqrt(diag(solve(f$he(fit$par)))))
   matcoef$Zscore <- matcoef$Estimates/matcoef$SD
   matcoef$Pvalue <- stats::pnorm(abs(matcoef$Zscore), lower.tail=FALSE)
-# Row names problem:
+  # Row names problem:
   rownames(matcoef)<-correct.names(names(f$par))
   obj <- list()
   class(obj) <- "starmagarch"

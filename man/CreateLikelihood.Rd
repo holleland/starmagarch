@@ -35,20 +35,20 @@ parameters <- list(mu    = 5,
                    omega = .9,
                    alpha = matrix(c(.1,.05,.2,.1), ncol = 2),
                    beta  = matrix(c(.6,.2), ncol = 1))
+m <- c(20, 1)
+burnin <- 150
+n <- 500
+
 # Simulate data:
-m <- c(25, 1)
-burnin <- 300
-n <- 2500
-W <- create.neighbourhood.array(m = m, sp = 3)
 set.seed(1234)
-y <- simSTARMAGARCH(parameters, n = n, m = m, W=W, burnin = burnin, type= "queen",
-               torus = TRUE)
+W <- create.neighbourhood.array(m = m, sp = 3, type = "queen", torus = TRUE)
+y <- simSTARMAGARCH(parameters, n = n, m = m, W = W, burnin = burnin)
 # Create likelihood object:
-f <- CreateLikelihood(y, W=W,
-                 init = apply(y,1,var), parameters=parameters)
+f <- CreateLikelihood(y, W = W, init = apply(y, 1, var),
+                      parameters = parameters, silent = FALSE)
 
 # Optimize the likelihood using:
-fit <- fitSTARMAGARCH(f, data= y, print = FALSE)
+fit <- fitSTARMAGARCH(f, data = y, print = FALSE)
 summary(fit)
 
 plot(fit)
@@ -60,13 +60,15 @@ qqline(residuals(fit), col = "red")
 # ---------------------------------
 # ------ MUST BE FIXED ------------
 # ---------------------------------
-#Set parameters$beta[2,1] to zero:
-#map <- parameterlist2maptemplate(parameters)
-#map$beta[2,1]<-as.factor(NA)
-#parameters$beta[2,1]<-0
-#f <- CreateLikelihood(y, W=W,
-#                      init = apply(y,1,var), parameters=parameters, map = map)
-#
+# If you want to set a parameter to a fixed value,
+# for instance the mean "mu" to zero, use the map argument:
+parameters$mu = 0
+f <- CreateLikelihood(y - 5, W = W,
+                      init = apply(y, 1, var),
+                      parameters = parameters,
+                      map = list(mu = factor(NA)))
+
 # Optimize the likelihood using:
-#fit <- fitSTARMAGARCH(f, data= y, parameters, print = FALSE)
+fit <- fitSTARMAGARCH(f, data= y, parameters, print = FALSE)
+summary(fit)
 }

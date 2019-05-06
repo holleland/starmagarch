@@ -4,12 +4,8 @@
 \alias{fitSTARMAGARCH}
 \title{Optimize likelihood using nlminb}
 \usage{
-fitSTARMAGARCH(f, data = NULL, print = TRUE, lower = c(-10000,
-  rep(-5, length(which(names(f$par) \%in\% c("phi", "theta")))), 1e-08,
-  rep(1e-08, length(which(names(f$par) \%in\% c("alpha", "beta"))))),
-  upper = c(10000, rep(5, length(which(names(f$par) \%in\% c("phi",
-  "theta")))), 10000, rep(1, length(which(names(f$par) \%in\% c("alpha",
-  "beta"))))))
+fitSTARMAGARCH(f, data = NULL, print = TRUE, lower = NULL,
+  upper = NULL)
 }
 \arguments{
 \item{f}{object produced by CreateLikelihood}
