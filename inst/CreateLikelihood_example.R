@@ -27,9 +27,6 @@ plot_garch(fit)
 qqnorm(residuals(fit), pch = 19)
 qqline(residuals(fit), col = "red")
 
-# ---------------------------------
-# ------ MUST BE FIXED ------------
-# ---------------------------------
 # If you want to set a parameter to a fixed value,
 # for instance the mean "mu" to zero, use the map argument:
 parameters$mu = 0
