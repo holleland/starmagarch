@@ -58,9 +58,9 @@ fitSTARMAGARCH <- function(f, data=NULL,  print = TRUE, lower = NULL, upper = NU
               rep(5,length(which(names(f$par)%in% c("phi","theta")))),
               rep(1e4, length(which(names(f$par) == "omega"))),
               rep(1,length(which(names(f$par) %in% c("alpha","beta")))))
-  if(length(lower)!=length(upper)) stop("upper and lower limits must be of same length.")
-  if(length(lower)!=length(f$par)) stop("lower be of same length as the number of parameters.")
-  if(length(upper)!=length(f$par)) stop("upper be of same length as the number of parameters.")
+  #if(length(lower)!=length(upper)) stop("upper and lower limits must be of same length.")
+  #if(length(lower)!=length(f$par)) stop("lower be of same length as the number of parameters.")
+  #if(length(upper)!=length(f$par)) stop("upper be of same length as the number of parameters.")
 
   # Optimization:
   fit <- stats::nlminb(f$par,f$fn,f$gr, f$he,
@@ -102,7 +102,8 @@ fitSTARMAGARCH <- function(f, data=NULL,  print = TRUE, lower = NULL, upper = NU
 #' @export
 AIC.starmagarch <- function(object,...) object$aic
 
-#BIC <- function(x, ...) UseMethod("BIC")
+#' @export
+BIC <- function(x, ...) UseMethod("BIC")
 #' Bayesian information criterion
 #'
 #' @rdname aic
@@ -141,7 +142,8 @@ print.starmagarch <- function(object,...){
   summary(object)
 }
 
-#sigma<- function(x,...) UseMethod("sigma")
+#' @export
+sigma<- function(x,...) UseMethod("sigma")
 #' Extract fitted sigma process
 #'
 #'

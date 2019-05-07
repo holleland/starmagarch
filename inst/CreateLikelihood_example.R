@@ -29,7 +29,9 @@ qqline(residuals(fit), col = "red")
 
 # If you want to set a parameter to a fixed value,
 # for instance the mean "mu" to zero, use the map argument:
-parameters$mu = 0
+
+\dontrun{
+  parameters$mu = 0
 f <- CreateLikelihood(y - 5, W = W,
                       init = apply(y, 1, var),
                       parameters = parameters,
@@ -38,3 +40,4 @@ f <- CreateLikelihood(y - 5, W = W,
 # Optimize the likelihood using:
 fit <- fitSTARMAGARCH(f, data= y, parameters, print = FALSE)
 summary(fit)
+}
