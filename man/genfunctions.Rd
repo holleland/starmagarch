@@ -4,6 +4,7 @@
 \alias{genfunctions}
 \alias{coef.starmagarch}
 \alias{print.starmagarch}
+\alias{sigma}
 \alias{sigma.starmagarch}
 \alias{fittedgarch.starmagarch}
 \alias{fitted.starmagarch}
@@ -13,9 +14,11 @@
 \usage{
 \method{coef}{starmagarch}(object, ...)
 
-\method{print}{starmagarch}(object, ...)
+\method{print}{starmagarch}(x, ...)
 
-\method{sigma}{starmagarch}(object, use.fallback = TRUE, ...)
+sigma(object, ...)
+
+\method{sigma}{starmagarch}(object, ...)
 
 \method{fittedgarch}{starmagarch}(object, ...)
 
@@ -30,7 +33,7 @@
 
 \item{...}{optionally more fitted model objects.}
 
-\item{use.fallback}{logical, passed to nobs}
+\item{x}{\code{starmagarch} object}
 }
 \value{
 \code{coef}: Coefficients of fitted model.

@@ -4,10 +4,10 @@
 \alias{plot_garch}
 \title{generic function}
 \usage{
-plot_garch(object, ...)
+plot_garch(x, ...)
 }
 \arguments{
-\item{object}{Object}
+\item{x}{Object}
 
 \item{...}{additional arguments}
 }

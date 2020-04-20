@@ -70,16 +70,21 @@ initial.parameters <- list(
 The next step is to build a likelihood object from the `TMB` package. We have created a template for STARMAGARCH and created a wrapper function that builds the model. 
 ```{r creatingLikelihood, eval = TRUE}
 # Create likelihood object:
+# f <- CreateLikelihood(y, W=W,
+#                  init = apply(y,1,var), parameters=initial.parameters)
+# To save time, we use the true parameters as initial values: 
 f <- CreateLikelihood(y, W=W,
-                 init = apply(y,1,var), parameters=initial.parameters)
+                 init = apply(y,1,var), parameters=parameters) 
+
 ```
 Here, `f` is a list of functions containing the likelihood, gradient and hessian functions found by automatic differentiation. The `init` argument allows the user to specify initial values for the $\{\sigma_0^2(u)\}$ process. This should be a non-negative vector of length `prod(m)`. The other necessary initial values are set to zero. 
 
 Optimizing the likelihood is done using the `nlminb` function. We have also here written a wrapper function to do this. This function also creates an object of the class `starmagarch`, with classical generic functions attached to it, such as `plot`, `plot_garch`, `summary`, `AIC`, `BIC`, `residuals`, `coef`, `sigma`, `fitted`, `fittedgarch`, etc.
-```{r fitting_model, eval = TRUE, fig.show='hold', fig.height = 5}
-fit <- fitSTARMAGARCH(f, data= y, print = FALSE)
+```{r fitting_model, eval = TRUE}
+fit <- fitSTARMAGARCH(f, data = y, print = FALSE)
 summary(fit)
-
+```
+```{r plotting_fit,eval = TRUE, fig.show='hold', fig.height = 5 }
 plot(fit)
 plot_garch(fit)
 ```

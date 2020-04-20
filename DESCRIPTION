@@ -4,7 +4,7 @@ Version: 0.0.0.9000
 Authors@R: person("Sondre", "Hølleland", email = "sondre.holleland@uib.no", role = c("aut", "cre"))
 Description: The starmagarch package provides functions for simulating and
     estimating spatio-temporal ARMA-GARCH models. 
-Depends: R (>= 3.5.2)
+Depends: R (>= 3.5.2.0)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

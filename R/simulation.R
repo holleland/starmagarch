@@ -4,8 +4,10 @@
 #' @param sp Max spatial order (integer).
 #' @param type neighbourhood type (rook or queen)
 #' @param torus Logical, indicator for circular space.
+#' @param sum.to.one Logical, indicator for standardized row sums.
 #' @export
-create.neighbourhood.array <- function(m = c(5, 5), sp = 2, type = "queen", torus = TRUE){
+create.neighbourhood.array <- function(m = c(5, 5), sp = 2, type = "queen", torus = TRUE,
+                                       sum.to.one = TRUE){
   # Checking input:
   if(length(m) == 1) m <- c(m, 1)
   if(!is.numeric(m)) stop("m must be numeric.")
@@ -20,8 +22,10 @@ create.neighbourhood.array <- function(m = c(5, 5), sp = 2, type = "queen", toru
   Warr[,,1] <- diag(prod(m))
   if(sp == 0) return(Warr)
   W <- spdep::nblag(W, max(sp,2))
-  for(i in 1:(sp))
+  for(i in 1:(sp)){
     Warr[,,i+1] <- spdep::nb2mat(W[[i]])
+    if(!sum.to.one) Warr[,,i+1] <- Warr[,,i+1]/max(Warr[,,i+1])
+  }
   return(Warr)
 }
 

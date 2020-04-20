@@ -3,10 +3,13 @@
 \name{aic}
 \alias{aic}
 \alias{AIC.starmagarch}
+\alias{BIC}
 \alias{BIC.starmagarch}
 \title{Information criterions}
 \usage{
 \method{AIC}{starmagarch}(object, ...)
+
+BIC(object, ...)
 
 \method{BIC}{starmagarch}(object, ...)
 }

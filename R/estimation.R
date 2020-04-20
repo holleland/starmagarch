@@ -44,9 +44,10 @@ CreateLikelihood <- function(data, W=NULL, init=apply(data, 1, stats::var), para
 #' @param upper upper limits for parameter estimates
 #' @param lower lower limits for parameters esimates
 #' @param print logical, indicator for printing summary
+#' @param simple  logical switch for turning on only returning parameter estimates and sd.
 #' @export
 #' @return \code{starmagarch} object.
-fitSTARMAGARCH <- function(f, data=NULL,  print = TRUE, lower = NULL, upper = NULL) {
+fitSTARMAGARCH <- function(f, data=NULL,  print = TRUE, lower = NULL, upper = NULL, simple=FALSE) {
   # Setting limits if not specified by user:
   if(is.null(lower))
     lower <- c(rep(-1e4, length(which(names(f$par) == "mu"))),
@@ -66,6 +67,9 @@ fitSTARMAGARCH <- function(f, data=NULL,  print = TRUE, lower = NULL, upper = NU
   fit <- stats::nlminb(f$par,f$fn,f$gr, f$he,
                 lower = lower,
                 upper = upper)
+  if(simple){
+    return(c(fit$par, sqrt(diag(solve(f$he(fit$par))))))
+  }
   # Problemer her hvis man ikke har med mu!!!
   matcoef <- data.frame(Estimates = fit$par,
                     SD = sqrt(diag(solve(f$he(fit$par)))))
@@ -102,8 +106,9 @@ fitSTARMAGARCH <- function(f, data=NULL,  print = TRUE, lower = NULL, upper = NU
 #' @export
 AIC.starmagarch <- function(object,...) object$aic
 
+#' @rdname aic
 #' @export
-BIC <- function(x, ...) UseMethod("BIC")
+BIC <- function(object, ...) UseMethod("BIC")
 #' Bayesian information criterion
 #'
 #' @rdname aic
@@ -117,7 +122,7 @@ BIC.starmagarch <- function(object, ...) object$bic
 #' Collection of generic functions for \code{starmagarch} objects.
 #'
 #' @param object \code{starmagarch} object
-#' @param use.fallback logical, passed to nobs
+#' @param x \code{starmagarch} object
 #' @param ... optionally more fitted model objects.
 #' @name genfunctions
 #'
@@ -138,19 +143,19 @@ coef.starmagarch <- function(object,...) object$coefficients
 #' @rdname genfunctions
 #' @return Printout
 #' @export
-print.starmagarch <- function(object,...){
-  summary(object)
+print.starmagarch <- function(x,...){
+  summary(x)
 }
-
+#' @rdname genfunctions
 #' @export
-sigma<- function(x,...) UseMethod("sigma")
+sigma<- function(object,...) UseMethod("sigma")
 #' Extract fitted sigma process
 #'
 #'
 #' @rdname genfunctions
 #' @return \code{sigma}: Fitted sigma process, \eqn{\{ \sigma_t(u) \}}.
 #' @export
-sigma.starmagarch <- function(object, use.fallback = TRUE, ...) object$sigma
+sigma.starmagarch <- function(object, ...) object$sigma
 
 fittedgarch <- function(x) UseMethod("fittedgarch")
 #' Extract fitted sigma process
@@ -183,14 +188,14 @@ residuals.starmagarch <- function(object,...) fittedgarch(object)/sigma(object)
 #'
 #'
 #' @name plotting
-#' @param object Class \code{starmagarch}
+#' @param x Class \code{starmagarch}
 #' @param ... additional arguments.
 #' @return ggplot object
 #' @export
-plot.starmagarch <- function(object,...){
+plot.starmagarch <- function(x, ...){
   # Creating a long format:
-  tmp <- reshape2::melt(fitted(object))
-  tmp2 <- reshape2::melt(object$observations)
+  tmp <- reshape2::melt(fitted(x))
+  tmp2 <- reshape2::melt(x$observations)
   tmp$type <- "Fitted values"
   tmp2$type <- "Observations"
   tmp <- rbind(tmp,tmp2)
@@ -209,7 +214,7 @@ plot.starmagarch <- function(object,...){
                        ggplot2::aes(tmp$Var2,tmp$Var1))+ggplot2::geom_raster(ggplot2::aes(fill=tmp$value))+
     ggplot2::xlab("Time")+ggplot2::ylab("Space")+ggplot2::theme_bw()+mytheme+
     ggplot2::scale_fill_gradient2(low = "blue", mid = "white", high = "red",
-                         midpoint = object$coefficients["mu"])+
+                         midpoint = x$coefficients["mu"])+
     ggplot2::facet_wrap(~type, ncol = 1)+
     ggplot2::scale_y_continuous(expand = c(0,0)) +
     ggplot2::scale_x_continuous(expand = c(0,0))+
@@ -219,10 +224,10 @@ plot.starmagarch <- function(object,...){
 
 #' generic function
 #'
-#' @param object Object
+#' @param x Object
 #' @param ... additional arguments
 #' @export
-plot_garch <- function(object,...) UseMethod("plot_garch")
+plot_garch <- function(x,...) UseMethod("plot_garch")
 
 #' Plot \code{starmgarch}
 #'
@@ -232,11 +237,11 @@ plot_garch <- function(object,...) UseMethod("plot_garch")
 #' @rdname plotting
 #' @return ggplot object
 #' @export
-plot_garch.starmagarch <- function(object,...){
+plot_garch.starmagarch <- function(x,...){
   # Creating a long format:
-  tmp <- reshape2::melt(fittedgarch(object))
-  tmp2 <- reshape2::melt(sigma(object))
-  tmp3 <- reshape2::melt(residuals(object))
+  tmp <- reshape2::melt(fittedgarch(x))
+  tmp2 <- reshape2::melt(sigma(x))
+  tmp3 <- reshape2::melt(residuals(x))
   tmp$type <- "GARCH process"
   tmp2$type <- "Fitted sigma"
   tmp3$type <- "Standardized residuals"
@@ -266,7 +271,7 @@ plot_garch.starmagarch <- function(object,...){
     ggplot2::xlab("Time")+ggplot2::ylab("Space")+
     ggplot2::theme_bw()+mytheme+
     ggplot2::scale_fill_gradient2(low = "blue", mid = "white", high = "red",
-                         midpoint = mean(object$sigma))+
+                         midpoint = mean(x$sigma))+
     ggplot2::facet_wrap(~type, ncol = 1)+
     ggplot2::theme(axis.line.x = ggplot2::element_blank())+
     ggplot2::scale_y_continuous(expand = c(0,0)) +
