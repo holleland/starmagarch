@@ -15,6 +15,7 @@
 #' @export
 #' @useDynLib STARMAGARCH
 #'
+#'
 CreateLikelihood <- function(data, W=NULL, init=apply(data, 1, stats::var), parameters = NULL, map=NULL, silent=TRUE){
   # Controlling input:
   if(length(dim(W))<3) stop("W must be array of dimension 3.")
