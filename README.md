@@ -24,6 +24,11 @@ library(devtools)
 devtools::install_github("holleland/starmagarch")
 ```
 
+## Usage
+
+To see how to use the package, see the
+[vignette](doc/simulation_and_estimation.html)
+
 ## Author
 
 **Sondre Hølleland** - [holleland](https://github.com/holleland)
