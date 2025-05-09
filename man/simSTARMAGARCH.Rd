@@ -4,8 +4,15 @@
 \alias{simSTARMAGARCH}
 \title{Simulation of STARMAGARCH}
 \usage{
-simSTARMAGARCH(parameters, n = 100, m = c(5, 5), W = NULL,
-  burnin = 0, type = "rook", torus = TRUE)
+simSTARMAGARCH(
+  parameters,
+  n = 100,
+  m = c(5, 5),
+  W = NULL,
+  burnin = 0,
+  type = "rook",
+  torus = TRUE
+)
 }
 \arguments{
 \item{parameters}{List of parameters.}

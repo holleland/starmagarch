@@ -4,8 +4,13 @@
 \alias{create.neighbourhood.array}
 \title{Structuring neighbourhood array}
 \usage{
-create.neighbourhood.array(m = c(5, 5), sp = 2, type = "queen",
-  torus = TRUE)
+create.neighbourhood.array(
+  m = c(5, 5),
+  sp = 2,
+  type = "queen",
+  torus = TRUE,
+  sum.to.one = TRUE
+)
 }
 \arguments{
 \item{m}{Spatial dimension vector of length 1 or 2 (integer).}
@@ -15,6 +20,8 @@ create.neighbourhood.array(m = c(5, 5), sp = 2, type = "queen",
 \item{type}{neighbourhood type (rook or queen)}
 
 \item{torus}{Logical, indicator for circular space.}
+
+\item{sum.to.one}{Logical, indicator for standardized row sums.}
 }
 \description{
 Structuring neighbourhood array

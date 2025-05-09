@@ -22,17 +22,15 @@ CreateLikelihood <- function(data, W=NULL, init=apply(data, 1, stats::var), para
   if(nrow(data)!=dim(W)[1]) stop("data must have the same number of rows as W.")
   if(dim(W)[1]!=dim(W)[2]) stop("Each neighbour matrix in the array W must be a square matrix.")
   if(length(init) != nrow(data)) stop("Init must be of same length as data.")
-  if(class(data)!="matrix") stop("data must be a matrix.")
-  if(class(W)!="array") stop("W must be an array.")
+  if (!inherits(data, "matrix")) stop("data must be a matrix.")
+  if (!inherits(W, "array")) stop("W must be a array")
   if(class(parameters)!="list") stop("parameters must be a list.")
   if(!all(c("mu", "phi", "theta","omega", "alpha", "beta") %in% names(parameters))){
     k <- which(!(c("mu", "phi", "theta","omega", "alpha", "beta") %in% names(parameters)))
     stop(paste("The following elements is missing from parameters: ",
                paste(c("mu", "phi", "theta","omega", "alpha", "beta")[k],collapse=", "), sep=""))
   }
-  if(class(W)!="array") stop("W must be an array.")
-
-  # Createing AD function (the QML function)
+    # Createing AD function (the QML function)
     return(TMB::MakeADFun(data = list(y=data, W=W,init = init),
                    parameters = parameters[c("mu", "phi", "theta","omega", "alpha", "beta")],
                    DLL = "STARMAGARCH", map = map, silent = silent))

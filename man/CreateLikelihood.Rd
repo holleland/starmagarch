@@ -4,8 +4,14 @@
 \alias{CreateLikelihood}
 \title{Function for estimating circular ARMAGARCH}
 \usage{
-CreateLikelihood(data, W = NULL, init = apply(data, 1, stats::var),
-  parameters = NULL, map = NULL, silent = TRUE)
+CreateLikelihood(
+  data,
+  W = NULL,
+  init = apply(data, 1, stats::var),
+  parameters = NULL,
+  map = NULL,
+  silent = TRUE
+)
 }
 \arguments{
 \item{data}{Data matrix (spatial row index, temporal col index)}

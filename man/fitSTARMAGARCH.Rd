@@ -4,8 +4,14 @@
 \alias{fitSTARMAGARCH}
 \title{Optimize likelihood using nlminb}
 \usage{
-fitSTARMAGARCH(f, data = NULL, print = TRUE, lower = NULL,
-  upper = NULL)
+fitSTARMAGARCH(
+  f,
+  data = NULL,
+  print = TRUE,
+  lower = NULL,
+  upper = NULL,
+  simple = FALSE
+)
 }
 \arguments{
 \item{f}{object produced by CreateLikelihood}
@@ -17,6 +23,8 @@ fitSTARMAGARCH(f, data = NULL, print = TRUE, lower = NULL,
 \item{lower}{lower limits for parameters esimates}
 
 \item{upper}{upper limits for parameter estimates}
+
+\item{simple}{logical switch for turning on only returning parameter estimates and sd.}
 }
 \value{
 \code{starmagarch} object.

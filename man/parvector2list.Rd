@@ -4,8 +4,13 @@
 \alias{parvector2list}
 \title{Function for generating a valid list of parameters from a vector}
 \usage{
-parvector2list(par = NULL, ar = c(2, 1), ma = c(2, 1), arch = c(2,
-  1), garch = c(2, 1))
+parvector2list(
+  par = NULL,
+  ar = c(2, 1),
+  ma = c(2, 1),
+  arch = c(2, 1),
+  garch = c(2, 1)
+)
 }
 \arguments{
 \item{par}{Parameter vector (numeric)}
